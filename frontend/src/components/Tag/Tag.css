@@ -1,0 +1,18 @@
+.tag {
+  display: inline-block;
+  background-color: #e1ecf4;
+  color: #39739d;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.tag:hover {
+  background-color: #d1e5f1;
+  color: #2c5777;
+}

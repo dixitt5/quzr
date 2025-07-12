@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import QuestionService from "../services/question.service";
 import Answers from "../components/Answer/Answers";
 import DOMPurify from "dompurify";
+import Tag from "../components/Tag/Tag";
 import "./QuestionDetail.css";
 
 const QuestionDetail = () => {
@@ -116,6 +117,10 @@ const QuestionDetail = () => {
       <article className="question-content">
         <header>
           <h1>{question.title}</h1>
+          <div className="tags-container detail-tags">
+            {question.tags &&
+              question.tags.map((tag) => <Tag key={tag.id} name={tag.name} />)}
+          </div>
           <div className="question-meta">
             <div className="author-info">
               <span>Posted by </span>

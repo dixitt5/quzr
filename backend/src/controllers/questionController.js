@@ -2,20 +2,12 @@ import prisma from "../config/database.js";
 
 export const createQuestion = async (req, res) => {
   try {
-    const { title, content, tags } = req.body;
+    const { title, content, tagIds } = req.body;
     const authorId = req.user.id;
 
     if (!title || !content) {
       return res.status(400).json({ message: 'Title and content are required' });
     }
-
-    const tagOperations = tags?.map((name) =>
-      prisma.tag.upsert({
-        where: { name },
-        update: {},
-        create: { name },
-      })
-    );
 
     const newQuestion = await prisma.question.create({
       data: {
@@ -23,7 +15,7 @@ export const createQuestion = async (req, res) => {
         content,
         authorId,
         tags: {
-          connect: tags ? (await Promise.all(tagOperations)).map((tag) => ({ id: tag.id })) : undefined,
+          connect: tagIds ? tagIds.map((id) => ({ id })) : undefined,
         },
       },
       include: {
@@ -76,6 +68,7 @@ export const getQuestionById = async (req, res) => {
             username: true
           }
         },
+        tags: true,
         answers: {
           include: {
             author: {
@@ -107,7 +100,7 @@ export const getQuestionById = async (req, res) => {
 export const updateQuestion = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, content } = req.body;
+    const { title, content, tagIds } = req.body;
 
     const question = await prisma.question.findUnique({
       where: { id }
@@ -121,18 +114,24 @@ export const updateQuestion = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
-    if (!title && !content) {
+    if (!title && !content && !tagIds) {
       return res
         .status(400)
-        .json({ message: "Title or content must be provided to update" });
+        .json({ message: "Title, content or tags must be provided to update" });
     }
 
     const updatedQuestion = await prisma.question.update({
       where: { id },
       data: {
         title,
-        content
-      }
+        content,
+        tags: {
+          set: tagIds ? tagIds.map((id) => ({ id })) : [],
+        },
+      },
+      include: {
+        tags: true,
+      },
     });
 
     res.status(200).json(updatedQuestion);
