@@ -47,6 +47,60 @@ Quzr is a minimal question-and-answer platform designed for collaborative learni
 
 *[To be defined based on implementation decisions]*
 
+## Local Development Setup
+
+Follow these steps to set up and run the backend server locally.
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or later)
+- [Docker](https://www.docker.com/) and Docker Compose
+- `npm` (or your preferred package manager)
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/quzr.git
+cd quzr
+```
+
+### 2. Set Up the Backend
+
+1.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Create the environment file:**
+    Create a new file named `.env` in the `backend` directory and add the following line:
+    ```env
+    DATABASE_URL="postgresql://user:password@localhost:5432/quzr_dev?schema=public"
+    ```
+
+4.  **Start the PostgreSQL database:**
+    Make sure Docker is running, then execute:
+    ```bash
+    docker compose up -d
+    ```
+
+5.  **Apply database migrations:**
+    This command will set up the database schema.
+    ```bash
+    npm run db:migrate
+    ```
+
+6.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+
+The backend API should now be running on `http://localhost:3000` (or the port specified in your configuration).
+
 **Status**: 🚧 In Development
 
 *Quzr - Where knowledge sharing meets simplicity.*
