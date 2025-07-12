@@ -1,18 +1,111 @@
 .tag {
-  display: inline-block;
-  background-color: #e1ecf4;
-  color: #39739d;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 4px 8px;
-  border-radius: 4px;
-  margin-right: 6px;
-  margin-bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--background-tertiary);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-lg);
+  margin-right: var(--space-sm);
+  margin-bottom: var(--space-sm);
   text-decoration: none;
-  transition: all 0.2s ease-in-out;
+  transition: all var(--transition-fast);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
 }
 
 .tag:hover {
-  background-color: #d1e5f1;
-  color: #2c5777;
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.tag:last-child {
+  margin-right: 0;
+}
+
+/* Tag variants */
+.tag.primary {
+  background-color: var(--primary-color);
+  color: var(--background-primary);
+  border-color: var(--primary-color);
+}
+
+.tag.primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.tag.secondary {
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+}
+
+.tag.secondary:hover {
+  background-color: var(--background-primary);
+  border-color: var(--text-secondary);
+}
+
+.tag.outlined {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border-medium);
+}
+
+.tag.outlined:hover {
+  background-color: var(--background-tertiary);
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+/* Size variants */
+.tag.small {
+  font-size: var(--font-size-xs);
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.tag.medium {
+  font-size: var(--font-size-sm);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.tag.large {
+  font-size: var(--font-size-base);
+  padding: var(--space-md) var(--space-lg);
+}
+
+/* Interactive tag */
+.tag.interactive {
+  cursor: pointer;
+}
+
+.tag.interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.tag.interactive:active {
+  transform: translateY(0);
+}
+
+/* Selected state */
+.tag.selected {
+  background-color: var(--primary-color);
+  color: var(--background-primary);
+  border-color: var(--primary-color);
+}
+
+.tag.selected:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+/* Disabled state */
+.tag.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
 }

@@ -1,7 +1,9 @@
 .question-list {
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  background-color: #fff;
+  background-color: var(--card-background);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--card-border);
 }
 
 .loading-container,
@@ -11,19 +13,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  color: #6a737c;
-  font-size: 1.1rem;
+  padding: var(--space-3xl);
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+  text-align: center;
+}
+
+.loading-container {
+  min-height: 400px;
 }
 
 .spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border-left-color: #007bff;
+  border: 3px solid var(--border-light);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border-top-color: var(--primary-color);
   animation: spin 1s ease infinite;
-  margin-bottom: 16px;
+  margin-bottom: var(--space-lg);
 }
 
 @keyframes spin {
@@ -32,5 +39,60 @@
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  color: var(--error);
+  background-color: var(--error-light);
+  border: 1px solid var(--error);
+  border-radius: var(--radius-md);
+  margin: var(--space-md);
+  padding: var(--space-lg);
+  font-size: var(--font-size-base);
+}
+
+.no-questions-message {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-base);
+  background-color: var(--background-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  margin: var(--space-md);
+  padding: var(--space-2xl);
+}
+
+.no-questions-message p {
+  margin: 0;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Question list items */
+.question-list .question-item:not(:last-child) {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.question-list .question-item:first-child {
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+}
+
+.question-list .question-item:last-child {
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .question-list {
+    border-radius: var(--radius-md);
+    margin: 0 var(--space-sm);
+  }
+  
+  .loading-container,
+  .error-message,
+  .no-questions-message {
+    padding: var(--space-lg);
+    font-size: var(--font-size-base);
   }
 }
