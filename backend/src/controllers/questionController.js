@@ -75,6 +75,20 @@ export const getQuestionById = async (req, res) => {
             id: true,
             username: true
           }
+        },
+        answers: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                username: true
+              }
+            },
+            votes: true
+          },
+          orderBy: {
+            createdAt: "asc"
+          }
         }
       }
     });

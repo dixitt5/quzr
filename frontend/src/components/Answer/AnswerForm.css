@@ -1,0 +1,47 @@
+.answer-form-container {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #eee;
+}
+
+.answer-form-container h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.rich-text-editor .ql-container {
+  min-height: 150px;
+  font-size: 1rem;
+}
+
+.rich-text-editor .ql-toolbar {
+  border-radius: 4px 4px 0 0;
+}
+
+.submit-answer-btn {
+  margin-top: 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-answer-btn:hover {
+  background-color: #45a049;
+}
+
+.submit-answer-btn:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-top: 10px;
+}

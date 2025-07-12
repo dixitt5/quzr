@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
-import { useAuth } from '../contexts/AuthContext';
-import QuestionService from '../services/question.service';
-import DOMPurify from 'dompurify';
-import './QuestionDetail.css';
+import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { format } from "date-fns";
+import { useAuth } from "../contexts/AuthContext";
+import QuestionService from "../services/question.service";
+import Answers from "../components/Answer/Answers";
+import DOMPurify from "dompurify";
+import "./QuestionDetail.css";
 
 const QuestionDetail = () => {
   const [question, setQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const { id } = useParams();
   const { currentUser } = useAuth();
   const navigate = useNavigate();
@@ -20,8 +21,10 @@ const QuestionDetail = () => {
         const data = await QuestionService.getQuestionById(id);
         setQuestion(data);
       } catch (err) {
-        console.error('Error fetching question:', err);
-        setError('Failed to load the question. It may have been deleted or does not exist.');
+        console.error("Error fetching question:", err);
+        setError(
+          "Failed to load the question. It may have been deleted or does not exist."
+        );
       } finally {
         setLoading(false);
       }
@@ -31,15 +34,26 @@ const QuestionDetail = () => {
   }, [id]);
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this question? This action cannot be undone.')) {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this question? This action cannot be undone."
+      )
+    ) {
       try {
         await QuestionService.deleteQuestion(id);
-        navigate('/');
+        navigate("/");
       } catch (err) {
-        console.error('Error deleting question:', err);
-        setError('Failed to delete the question. Please try again later.');
+        console.error("Error deleting question:", err);
+        setError("Failed to delete the question. Please try again later.");
       }
     }
+  };
+
+  const handleAnswerUpdate = (newAnswer) => {
+    setQuestion((prevQuestion) => ({
+      ...prevQuestion,
+      answers: [...prevQuestion.answers, newAnswer]
+    }));
   };
 
   if (loading) {
@@ -56,7 +70,9 @@ const QuestionDetail = () => {
       <div className="question-detail-container error">
         <h2>Error</h2>
         <p>{error}</p>
-        <Link to="/" className="back-button">Back to Home</Link>
+        <Link to="/" className="back-button">
+          Back to Home
+        </Link>
       </div>
     );
   }
@@ -65,21 +81,29 @@ const QuestionDetail = () => {
     return (
       <div className="question-detail-container not-found">
         <h2>Question Not Found</h2>
-        <p>The question you&apos;re looking for doesn&apos;t exist or has been removed.</p>
-        <Link to="/" className="back-button">Back to Home</Link>
+        <p>
+          The question you&apos;re looking for doesn&apos;t exist or has been
+          removed.
+        </p>
+        <Link to="/" className="back-button">
+          Back to Home
+        </Link>
       </div>
     );
   }
 
   const isAuthor = currentUser && currentUser.id === question.authorId;
-  const formattedDate = question.createdAt ? format(new Date(question.createdAt), 'MMM d, yyyy') : '';
+  const formattedDate = question.createdAt
+    ? format(new Date(question.createdAt), "MMM d, yyyy")
+    : "";
 
-  // Sanitize the HTML content to prevent XSS attacks
   const sanitizedContent = DOMPurify.sanitize(question.content);
 
   return (
     <div className="question-detail-container">
-      <Link to="/" className="back-link">← Back to all questions</Link>
+      <Link to="/" className="back-link">
+        ← Back to all questions
+      </Link>
 
       <article className="question-content">
         <header>
@@ -87,25 +111,34 @@ const QuestionDetail = () => {
           <div className="question-meta">
             <div className="author-info">
               <span>Posted by </span>
-              <strong>{question.author?.username || 'Unknown User'}</strong>
+              <strong>{question.author?.username || "Unknown User"}</strong>
             </div>
             <div className="question-date">{formattedDate}</div>
           </div>
         </header>
 
-        <div className="question-body">
-          <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
-        </div>
+        <div
+          className="question-body"
+          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+        />
 
         {isAuthor && (
           <div className="author-actions">
-            <Link to={`/questions/${id}/edit`} className="edit-button">Edit</Link>
-            <button onClick={handleDelete} className="delete-button">Delete</button>
+            <Link to={`/questions/${id}/edit`} className="edit-button">
+              Edit
+            </Link>
+            <button onClick={handleDelete} className="delete-button">
+              Delete
+            </button>
           </div>
         )}
       </article>
+
+      {question.answers && (
+        <Answers question={question} onAnswerUpdate={handleAnswerUpdate} />
+      )}
     </div>
   );
 };
 
-export default QuestionDetail; 
+export default QuestionDetail;
