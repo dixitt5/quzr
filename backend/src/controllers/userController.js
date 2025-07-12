@@ -1,36 +1,8 @@
 import prisma from "../config/database.js";
 
-export const registerUser = async (req, res) => {
-  try {
-    const { clerkId, email, username } = req.body;
-
-    if (!clerkId || !email) {
-      return res
-        .status(400)
-        .json({ message: "clerkId and email are required" });
-    }
-
-    const newUser = await prisma.user.create({
-      data: {
-        clerkId,
-        email,
-        username
-      }
-    });
-
-    res.status(201).json(newUser);
-  } catch (error) {
-    console.error("Error registering user:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
 export const getProfile = async (req, res) => {
   try {
-    const { clerkId } = req.params;
-    const user = await prisma.user.findUnique({
-      where: { clerkId }
-    });
+    const user = req.user;
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -45,7 +17,7 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { clerkId } = req.params;
+    const { id } = req.user;
     const { username } = req.body;
 
     if (!username) {
@@ -53,10 +25,11 @@ export const updateProfile = async (req, res) => {
     }
 
     const updatedUser = await prisma.user.update({
-      where: { clerkId },
+      where: { id },
       data: {
-        username
-      }
+        username,
+      },
+      select: { id: true, email: true, username: true, role: true },
     });
 
     res.status(200).json(updatedUser);

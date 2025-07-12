@@ -1,14 +1,12 @@
 import { Router } from "express";
-import {
-  registerUser,
-  getProfile,
-  updateProfile
-} from "../controllers/userController.js";
+import { getProfile, updateProfile } from "../controllers/userController.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
-router.post("/", registerUser);
-router.get("/:clerkId", getProfile);
-router.put("/:clerkId", updateProfile);
+router.use(protect);
+
+router.get("/profile", getProfile);
+router.put("/profile", updateProfile);
 
 export default router;
