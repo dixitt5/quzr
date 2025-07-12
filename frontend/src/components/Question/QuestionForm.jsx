@@ -1,16 +1,54 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import 'quill-emoji/dist/quill-emoji.css';
 import { useAuth } from '../../contexts/AuthContext';
 import QuestionService from '../../services/question.service';
 import './QuestionForm.css';
+
+// Import emoji module
+import QuillEmoji from 'quill-emoji';
+const { EmojiBlot, ShortNameEmoji, ToolbarEmoji, TextAreaEmoji } = QuillEmoji;
+
+// Register modules with Quill
+ReactQuill.Quill.register({
+  'formats/emoji': EmojiBlot,
+  'modules/emoji-shortname': ShortNameEmoji,
+  'modules/emoji-toolbar': ToolbarEmoji,
+  'modules/emoji-textarea': TextAreaEmoji
+});
 
 const schema = yup.object().shape({
   title: yup.string().required('Title is required').min(5, 'Title must be at least 5 characters'),
   content: yup.string().required('Content is required').min(20, 'Content must be at least 20 characters')
 });
+
+// Quill editor modules and formats
+const modules = {
+  toolbar: [
+    ['bold', 'italic', 'strike'],          // toggled buttons
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    ['link'],
+    [{ 'align': [] }],
+    ['emoji'],
+    ['clean'],                             // remove formatting
+  ],
+  'emoji-toolbar': true,
+  'emoji-shortname': true,
+  'emoji-textarea': false,
+};
+
+const formats = [
+  'bold', 'italic', 'strike',
+  'list', 'bullet', 
+  'link',
+  'align',
+  'emoji',
+];
 
 const QuestionForm = ({ isEdit = false }) => {
   const { id } = useParams();
@@ -20,8 +58,12 @@ const QuestionForm = ({ isEdit = false }) => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
-    resolver: yupResolver(schema)
+  const { register, handleSubmit, control, formState: { errors }, reset } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      title: '',
+      content: '',
+    }
   });
 
   // If editing, load the original question
@@ -115,12 +157,19 @@ const QuestionForm = ({ isEdit = false }) => {
           
           <div className="form-group">
             <label htmlFor="content">Content</label>
-            <textarea
-              id="content"
-              rows={10}
-              {...register('content')}
-              className={errors.content ? 'error' : ''}
-              placeholder="Write your article content here..."
+            <Controller
+              name="content"
+              control={control}
+              render={({ field }) => (
+                <ReactQuill
+                  {...field}
+                  theme="snow"
+                  modules={modules}
+                  formats={formats}
+                  className={errors.content ? 'quill-error' : ''}
+                  placeholder="Write your article content here..."
+                />
+              )}
             />
             {errors.content && <p className="error-message">{errors.content.message}</p>}
           </div>
