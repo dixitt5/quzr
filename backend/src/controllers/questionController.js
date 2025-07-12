@@ -2,25 +2,33 @@ import prisma from "../config/database.js";
 
 export const createQuestion = async (req, res) => {
   try {
-    const { title, content, authorId } = req.body;
+    const { title, content, tags } = req.body;
+    const authorId = req.user.id;
 
-    if (!title || !content || !authorId) {
-      return res
-        .status(400)
-        .json({ message: "Title, content, and authorId are required" });
+    if (!title || !content) {
+      return res.status(400).json({ message: 'Title and content are required' });
     }
 
-    const author = await prisma.user.findUnique({ where: { id: authorId } });
-    if (!author) {
-      return res.status(404).json({ message: "Author not found" });
-    }
+    const tagOperations = tags?.map((name) =>
+      prisma.tag.upsert({
+        where: { name },
+        update: {},
+        create: { name },
+      })
+    );
 
     const newQuestion = await prisma.question.create({
       data: {
         title,
         content,
-        authorId
-      }
+        authorId,
+        tags: {
+          connect: tags ? (await Promise.all(tagOperations)).map((tag) => ({ id: tag.id })) : undefined,
+        },
+      },
+      include: {
+        tags: true,
+      },
     });
 
     res.status(201).json(newQuestion);
@@ -37,13 +45,17 @@ export const getAllQuestions = async (req, res) => {
         author: {
           select: {
             id: true,
-            username: true
-          }
-        }
+            username: true,
+          },
+        },
+        tags: true,
+        _count: {
+          select: { votes: true, answers: true },
+        },
       },
       orderBy: {
-        createdAt: "desc"
-      }
+        createdAt: 'desc',
+      },
     });
     res.status(200).json(questions);
   } catch (error) {
