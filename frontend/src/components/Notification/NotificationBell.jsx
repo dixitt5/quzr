@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import NotificationService from "../../services/notification.service";
 import NotificationPanel from "./NotificationPanel";
 import { FaBell } from "react-icons/fa";
