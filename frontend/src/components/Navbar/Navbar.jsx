@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
+  const { currentUser, logout } = useAuth();
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -9,12 +12,21 @@ const Navbar = () => {
           super-blogs
         </Link>
         <div className="nav-buttons">
-          <Link to="/login" className="nav-link">
-            Log In
-          </Link>
-          <Link to="/register" className="auth-button">
-            Sign Up
-          </Link>
+          {currentUser ? (
+            <>
+              <span className="welcome-text">Welcome, {currentUser.username || currentUser.email}!</span>
+              <button onClick={logout} className="logout-button">Log Out</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="nav-link">
+                Log In
+              </Link>
+              <Link to="/register" className="auth-button">
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>

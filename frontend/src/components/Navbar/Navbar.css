@@ -59,4 +59,26 @@
 .auth-button:hover {
   background-color: #45a049;
   text-decoration: none;
+}
+
+.welcome-text {
+  color: #fff;
+  font-weight: 500;
+}
+
+.logout-button {
+  background-color: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #ff6b6b;
+  color: #ff6b6b;
 } 

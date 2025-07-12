@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import * as yup from 'yup';
+import { useAuth } from '../../contexts/AuthContext';
 import './Login.css';
 
 const schema = yup.object().shape({
@@ -12,6 +13,13 @@ const schema = yup.object().shape({
 
 const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiError, setApiError] = useState('');
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Get success message from location state (if redirected from register)
+  const successMessage = location.state?.message || '';
   
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema)
@@ -19,19 +27,14 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
+    setApiError('');
+    
     try {
-      // In a real application, this would call an API endpoint
-      console.log('Login data submitted:', data);
-      // Simulate API call
-      setTimeout(() => {
-        alert('Login successful!');
-        // Here you would typically:
-        // 1. Store auth token in localStorage/sessionStorage
-        // 2. Update auth context
-        // 3. Redirect to dashboard/home
-      }, 1000);
+      await login(data.email, data.password);
+      navigate('/'); // Redirect to home page after successful login
     } catch (error) {
       console.error('Login error:', error);
+      setApiError(error.response?.data?.message || 'Failed to log in. Please check your credentials.');
     } finally {
       setIsSubmitting(false);
     }
@@ -42,6 +45,9 @@ const Login = () => {
       <div className="login-card">
         <h2>Welcome Back</h2>
         <p className="subtitle">Log in to access your account</p>
+        
+        {successMessage && <p className="success-message">{successMessage}</p>}
+        {apiError && <p className="error-message form-error">{apiError}</p>}
         
         <form onSubmit={handleSubmit(onSubmit)} className="login-form">
           <div className="form-group">

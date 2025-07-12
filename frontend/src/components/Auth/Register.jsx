@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+import { useAuth } from '../../contexts/AuthContext';
 import './Register.css';
 
 const schema = yup.object().shape({
@@ -16,6 +17,9 @@ const schema = yup.object().shape({
 
 const Register = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiError, setApiError] = useState('');
+  const { register: registerUser } = useAuth();
+  const navigate = useNavigate();
   
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema)
@@ -23,13 +27,21 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
+    setApiError('');
+    
     try {
-      // In a real application, this would call an API endpoint
-      console.log('Form data submitted:', data);
-      // For now, we're just simulating a successful registration
-      alert('Registration successful! You can now login.');
+      // Remove confirmPassword as it's not needed for the API
+      const { confirmPassword, ...registerData } = data; // eslint-disable-line no-unused-vars
+      
+      await registerUser(registerData);
+      navigate('/login', { 
+        state: { 
+          message: 'Registration successful! You can now log in.' 
+        } 
+      });
     } catch (error) {
       console.error('Registration error:', error);
+      setApiError(error.response?.data?.message || 'Failed to register. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -40,6 +52,8 @@ const Register = () => {
       <div className="register-card">
         <h2>Create an Account</h2>
         <p className="subtitle">Join super-blogs to share your thoughts and read amazing content</p>
+        
+        {apiError && <p className="error-message form-error">{apiError}</p>}
         
         <form onSubmit={handleSubmit(onSubmit)} className="register-form">
           <div className="form-group">
