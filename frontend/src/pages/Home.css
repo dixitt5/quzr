@@ -23,6 +23,23 @@
   color: #666;
   max-width: 600px;
   margin: 0 auto;
+  margin-bottom: 24px;
+}
+
+.create-question-btn {
+  display: inline-block;
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.create-question-btn:hover {
+  background-color: #45a049;
+  text-decoration: none;
 }
 
 .blogs-container h2 {
@@ -43,6 +60,9 @@
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .blog-card:hover {
@@ -68,6 +88,9 @@
 
 .blog-content {
   padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .blog-content h3 {
@@ -76,11 +99,22 @@
   color: #222;
 }
 
+.question-title-link {
+  color: #222;
+  text-decoration: none;
+}
+
+.question-title-link:hover {
+  color: #4caf50;
+  text-decoration: none;
+}
+
 .blog-excerpt {
   color: #666;
   font-size: 0.95rem;
   line-height: 1.5;
   margin-bottom: 15px;
+  flex-grow: 1;
 }
 
 .blog-meta {
@@ -100,10 +134,59 @@
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  align-self: flex-start;
 }
 
 .read-more-btn:hover {
   background-color: #45a049;
+  text-decoration: none;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 15px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #4caf50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  padding: 15px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.no-questions {
+  text-align: center;
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+}
+
+.no-questions p {
+  margin-bottom: 20px;
+  color: #666;
+  font-size: 1.1rem;
 }
 
 @media (max-width: 768px) {

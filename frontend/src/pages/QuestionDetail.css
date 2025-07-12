@@ -1,0 +1,149 @@
+.question-detail-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  color: #4caf50;
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.question-content {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+}
+
+.question-content header {
+  margin-bottom: 30px;
+}
+
+.question-content h1 {
+  font-size: 2.2rem;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.question-meta {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.author-info {
+  display: flex;
+  gap: 4px;
+}
+
+.question-date {
+  color: #888;
+}
+
+.question-body {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.question-body p {
+  margin-bottom: 20px;
+}
+
+.author-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.edit-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #45a049;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 15px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #4caf50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error, .not-found {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.error h2, .not-found h2 {
+  color: #e74c3c;
+  margin-bottom: 16px;
+}
+
+.error p, .not-found p {
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.back-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
+} 

@@ -1,61 +1,99 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
+import { useAuth } from '../contexts/AuthContext';
+import QuestionService from '../services/question.service';
 import './Home.css';
 
 const Home = () => {
-  // Sample blog data - in a real application this would come from an API
-  const blogs = [
-    {
-      id: 1,
-      title: 'Getting Started with React',
-      excerpt: 'Learn the basics of React and build your first component...',
-      author: 'Jane Doe',
-      date: 'May 15, 2023',
-      imageUrl: 'https://picsum.photos/id/0/600/400'
-    },
-    {
-      id: 2,
-      title: 'Modern CSS Techniques',
-      excerpt: 'Explore the latest CSS features that make web styling easier...',
-      author: 'John Smith',
-      date: 'June 2, 2023',
-      imageUrl: 'https://picsum.photos/id/1/600/400'
-    },
-    {
-      id: 3,
-      title: 'JavaScript ES6 and Beyond',
-      excerpt: 'Discover how modern JavaScript can improve your code quality...',
-      author: 'Alex Johnson',
-      date: 'June 22, 2023',
-      imageUrl: 'https://picsum.photos/id/2/600/400'
-    }
-  ];
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const data = await QuestionService.getAllQuestions();
+        setQuestions(data);
+      } catch (err) {
+        console.error('Error fetching questions:', err);
+        setError('Failed to load questions. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, []);
 
   return (
     <div className="home-container">
       <div className="hero-section">
         <h1>Welcome to Super-Blogs</h1>
         <p>Discover amazing articles and share your thoughts with the world</p>
+        
+        {currentUser && (
+          <Link to="/questions/new" className="create-question-btn">
+            Create New Post
+          </Link>
+        )}
       </div>
       
       <div className="blogs-container">
         <h2>Latest Articles</h2>
-        <div className="blog-grid">
-          {blogs.map(blog => (
-            <div className="blog-card" key={blog.id}>
-              <div className="blog-image-container">
-                <img src={blog.imageUrl} alt={blog.title} />
-              </div>
-              <div className="blog-content">
-                <h3>{blog.title}</h3>
-                <p className="blog-excerpt">{blog.excerpt}</p>
-                <div className="blog-meta">
-                  <span className="blog-author">By {blog.author}</span>
-                  <span className="blog-date">{blog.date}</span>
+        
+        {loading ? (
+          <div className="loading">
+            <div className="spinner"></div>
+            <p>Loading articles...</p>
+          </div>
+        ) : error ? (
+          <div className="error-message">{error}</div>
+        ) : questions.length === 0 ? (
+          <div className="no-questions">
+            <p>No articles found. Be the first to create one!</p>
+            {currentUser && (
+              <Link to="/questions/new" className="create-question-btn">
+                Create New Post
+              </Link>
+            )}
+          </div>
+        ) : (
+          <div className="blog-grid">
+            {questions.map(question => {
+              const formattedDate = question.createdAt 
+                ? format(new Date(question.createdAt), 'MMM d, yyyy')
+                : '';
+
+              return (
+                <div className="blog-card" key={question.id}>
+                  <div className="blog-content">
+                    <h3>
+                      <Link to={`/questions/${question.id}`} className="question-title-link">
+                        {question.title}
+                      </Link>
+                    </h3>
+                    <p className="blog-excerpt">
+                      {question.content.length > 150 
+                        ? question.content.substring(0, 150) + '...' 
+                        : question.content}
+                    </p>
+                    <div className="blog-meta">
+                      <span className="blog-author">
+                        By {question.author?.username || 'Unknown User'}
+                      </span>
+                      <span className="blog-date">{formattedDate}</span>
+                    </div>
+                    <Link to={`/questions/${question.id}`} className="read-more-btn">
+                      Read More
+                    </Link>
+                  </div>
                 </div>
-                <button className="read-more-btn">Read More</button>
-              </div>
-            </div>
-          ))}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
