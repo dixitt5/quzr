@@ -6,6 +6,7 @@ import morgan from "morgan";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import questionRoutes from "./routes/questionRoutes.js";
+import answerRoutes from './routes/answerRoutes.js';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/questions", questionRoutes);
+app.use('/api/answers', answerRoutes);
 
 app.get("/", (req, res) => {
   res.send("Quzr Backend is running!");
