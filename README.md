@@ -45,7 +45,11 @@ Quzr is a minimal question-and-answer platform designed for collaborative learni
 
 ## Technical Stack
 
-*[To be defined based on implementation decisions]*
+- **Frontend**: React 18, Vite
+- **Backend**: Node.js, Express
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Containerization**: Docker
 
 ## Local Development Setup
 
