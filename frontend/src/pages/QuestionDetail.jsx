@@ -56,6 +56,16 @@ const QuestionDetail = () => {
     }));
   };
 
+  const handleAnswerAccepted = (acceptedAnswer) => {
+    setQuestion((prevQuestion) => ({
+      ...prevQuestion,
+      answers: prevQuestion.answers.map((answer) => ({
+        ...answer,
+        isAccepted: answer.id === acceptedAnswer.id
+      }))
+    }));
+  };
+
   if (loading) {
     return (
       <div className="question-detail-container loading">
@@ -135,7 +145,11 @@ const QuestionDetail = () => {
       </article>
 
       {question.answers && (
-        <Answers question={question} onAnswerUpdate={handleAnswerUpdate} />
+        <Answers
+          question={question}
+          onAnswerUpdate={handleAnswerUpdate}
+          onAnswerAccepted={handleAnswerAccepted}
+        />
       )}
     </div>
   );

@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import AnswerService from "../../services/answer.service";
 import "./Answers.css";
 
-const Answers = ({ question, onAnswerUpdate }) => {
+const Answers = ({ question, onAnswerUpdate, onAnswerAccepted }) => {
   const { currentUser } = useAuth();
 
   const handleAnswerSubmitted = async (content) => {
@@ -24,9 +24,16 @@ const Answers = ({ question, onAnswerUpdate }) => {
         {question.answers.length === 1 ? "Answer" : "Answers"}
       </h2>
       <div className="answers-list">
-        {question.answers.map((answer) => (
-          <AnswerItem key={answer.id} answer={answer} />
-        ))}
+        {question.answers
+          .sort((a, b) => b.isAccepted - a.isAccepted)
+          .map((answer) => (
+            <AnswerItem
+              key={answer.id}
+              answer={answer}
+              questionAuthorId={question.authorId}
+              onAnswerAccepted={onAnswerAccepted}
+            />
+          ))}
       </div>
       {currentUser ? (
         <AnswerForm

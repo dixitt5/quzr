@@ -55,3 +55,33 @@
   font-size: 0.9rem;
   color: #666;
 }
+
+.answer-item.accepted {
+  background-color: #e8f5e9; /* A light green background */
+  border-left: 4px solid #4caf50;
+  padding-left: 16px;
+  border-radius: 4px;
+}
+
+.accepted-badge {
+  color: #4caf50;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.accept-answer-btn {
+  margin-top: 15px;
+  background: none;
+  border: 1px solid #4caf50;
+  color: #4caf50;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.accept-answer-btn:hover {
+  background-color: #4caf50;
+  color: white;
+}
