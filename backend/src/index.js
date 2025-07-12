@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("Quzr Backend is running!");
