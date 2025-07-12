@@ -19,6 +19,11 @@ enum Role {
   ADMIN
 }
 
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -30,6 +35,7 @@ model User {
 
   questions Question[]
   answers   Answer[]
+  votes     Vote[]
 }
 
 model Question {
@@ -43,6 +49,7 @@ model Question {
   authorId String
 
   answers Answer[]
+  votes   Vote[]
 }
 
 model Answer {
@@ -56,4 +63,19 @@ model Answer {
   authorId   String
   question   Question @relation(fields: [questionId], references: [id])
   questionId String
+  votes      Vote[]
+}
+
+model Vote {
+  id         String   @id @default(cuid())
+  type       VoteType
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId String?
+  question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  answerId   String?
+  answer     Answer?  @relation(fields: [answerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@unique([userId, answerId])
 }
