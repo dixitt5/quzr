@@ -1,52 +1,84 @@
-.tag-filter-dropdown {
+.tag-filter-dropdown-container {
   position: relative;
   display: inline-block;
+  min-width: 220px;
 }
 
-.dropdown-toggle {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 10px 16px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: #333;
-  width: 200px;
-  text-align: left;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Override react-select styles to ensure our design system variables work */
+.tag-filter-select .tag-filter__control {
+  background-color: var(--background-primary) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: var(--radius-md) !important;
+  min-height: 48px !important;
+  transition: all var(--transition-fast) !important;
 }
 
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 8px 0;
-  margin-top: 4px;
-  z-index: 1000;
-  width: 200px;
-  max-height: 250px;
-  overflow-y: auto;
+.tag-filter-select .tag-filter__control:hover {
+  border-color: var(--border-dark) !important;
 }
 
-.dropdown-item {
-  display: block;
-  padding: 8px 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.tag-filter-select .tag-filter__control--is-focused {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 3px rgba(26, 137, 23, 0.1) !important;
 }
 
-.dropdown-item:hover {
-  background-color: #f1f2f3;
+.tag-filter-select .tag-filter__placeholder {
+  color: var(--text-tertiary) !important;
+  font-size: var(--font-size-base) !important;
+  font-weight: var(--font-weight-medium) !important;
 }
 
-.dropdown-item input[type="checkbox"] {
-  margin-right: 8px;
+.tag-filter-select .tag-filter__single-value {
+  color: var(--text-primary) !important;
+  font-size: var(--font-size-base) !important;
+  font-weight: var(--font-weight-medium) !important;
+}
+
+.tag-filter-select .tag-filter__menu {
+  background-color: var(--background-primary) !important;
+  border: 1px solid var(--border-medium) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+  z-index: 20 !important;
+}
+
+.tag-filter-select .tag-filter__option {
+  padding: var(--space-md) !important;
+  font-size: var(--font-size-sm) !important;
+  color: var(--text-primary) !important;
+  cursor: pointer !important;
+  transition: all var(--transition-fast) !important;
+}
+
+.tag-filter-select .tag-filter__option--is-focused {
+  background-color: var(--background-secondary) !important;
+}
+
+.tag-filter-select .tag-filter__option--is-selected {
+  background-color: var(--primary-color) !important;
+  color: var(--background-primary) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+.tag-filter-select .tag-filter__dropdown-indicator {
+  color: var(--text-secondary) !important;
+}
+
+.tag-filter-select .tag-filter__dropdown-indicator:hover {
+  color: var(--text-primary) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tag-filter-dropdown-container {
+    min-width: 180px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .tag-filter-dropdown-container {
+    min-width: auto;
+    width: 100%;
+  }
 }
