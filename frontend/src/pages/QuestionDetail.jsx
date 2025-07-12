@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useAuth } from '../contexts/AuthContext';
 import QuestionService from '../services/question.service';
+import DOMPurify from 'dompurify';
 import './QuestionDetail.css';
 
 const QuestionDetail = () => {
@@ -73,6 +74,9 @@ const QuestionDetail = () => {
   const isAuthor = currentUser && currentUser.id === question.authorId;
   const formattedDate = question.createdAt ? format(new Date(question.createdAt), 'MMM d, yyyy') : '';
 
+  // Sanitize the HTML content to prevent XSS attacks
+  const sanitizedContent = DOMPurify.sanitize(question.content);
+
   return (
     <div className="question-detail-container">
       <Link to="/" className="back-link">← Back to all questions</Link>
@@ -90,7 +94,7 @@ const QuestionDetail = () => {
         </header>
 
         <div className="question-body">
-          <p>{question.content}</p>
+          <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
         </div>
 
         {isAuthor && (

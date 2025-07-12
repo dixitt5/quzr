@@ -5,6 +5,21 @@ import { useAuth } from '../contexts/AuthContext';
 import QuestionService from '../services/question.service';
 import './Home.css';
 
+// Helper function to strip HTML tags and extract plain text
+const stripHtml = (html) => {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  return doc.body.textContent || '';
+};
+
+// Helper function to create excerpt with character limit
+const createExcerpt = (content, limit = 150) => {
+  if (!content) return '';
+  
+  const plainText = stripHtml(content);
+  if (plainText.length <= limit) return plainText;
+  return plainText.substring(0, limit) + '...';
+};
+
 const Home = () => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -66,6 +81,8 @@ const Home = () => {
                 ? format(new Date(question.createdAt), 'MMM d, yyyy')
                 : '';
 
+              const excerpt = createExcerpt(question.content, 150);
+
               return (
                 <div className="blog-card" key={question.id}>
                   <div className="blog-content">
@@ -74,11 +91,7 @@ const Home = () => {
                         {question.title}
                       </Link>
                     </h3>
-                    <p className="blog-excerpt">
-                      {question.content.length > 150 
-                        ? question.content.substring(0, 150) + '...' 
-                        : question.content}
-                    </p>
+                    <p className="blog-excerpt">{excerpt}</p>
                     <div className="blog-meta">
                       <span className="blog-author">
                         By {question.author?.username || 'Unknown User'}
