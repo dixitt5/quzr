@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import QuestionList from "../components/Question/QuestionList";
 import tagService from "../services/tag.service";
@@ -23,11 +23,13 @@ const Home = () => {
   }, []);
 
   const handleTagChange = (tagName) => {
-    setSelectedTags((prevTags) =>
-      prevTags.includes(tagName)
-        ? prevTags.filter((t) => t !== tagName)
-        : [...prevTags, tagName]
-    );
+    if (tagName) {
+      // Single selection: replace current selection
+      setSelectedTags([tagName]);
+    } else {
+      // Clear selection
+      setSelectedTags([]);
+    }
   };
 
   return (

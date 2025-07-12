@@ -1,71 +1,161 @@
 .home-container {
-  max-width: 1400px;
+  max-width: var(--container-2xl);
   margin: 0 auto;
-  padding: 24px;
+  padding: var(--space-xl);
+  background-color: var(--background-secondary);
+  min-height: calc(100vh - 72px);
 }
 
 .home-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-xl);
+  background-color: var(--card-background);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .home-title {
-  font-size: 2rem;
-  font-weight: 600;
-  color: #2d3748;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin: 0;
 }
 
 .ask-question-btn {
-  background-color: #007bff;
-  color: #fff;
+  background-color: var(--primary-color);
+  color: var(--background-primary);
   border: none;
-  padding: 12px 18px;
-  border-radius: 6px;
-  font-size: 1rem;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.2s;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .ask-question-btn:hover {
-  background-color: #0056b3;
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .home-filters {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: var(--space-xl);
+  padding: var(--space-lg);
+  background-color: var(--card-background);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .filter-buttons {
   display: flex;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
   overflow: hidden;
+  background-color: var(--background-primary);
 }
 
 .filter-btn {
-  background-color: #fff;
+  background-color: var(--background-primary);
   border: none;
-  padding: 10px 16px;
+  padding: var(--space-md) var(--space-lg);
   cursor: pointer;
-  font-size: 0.9rem;
-  color: #333;
-  border-right: 1px solid #ccc;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  border-right: 1px solid var(--border-medium);
+  transition: all var(--transition-fast);
 }
 
 .filter-btn:last-child {
   border-right: none;
 }
 
+.filter-btn:hover {
+  background-color: var(--background-secondary);
+}
+
 .filter-btn.active {
-  background-color: #e9ecef;
-  font-weight: 600;
+  background-color: var(--primary-color);
+  color: var(--background-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.tag-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
 }
 
 .home-content {
-  margin-top: 16px;
+  margin-top: var(--space-lg);
+  background-color: var(--card-background);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .home-container {
+    padding: var(--space-lg) var(--space-md);
+  }
+  
+  .home-header {
+    flex-direction: column;
+    gap: var(--space-lg);
+    text-align: center;
+    padding: var(--space-lg);
+  }
+  
+  .home-title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .home-filters {
+    flex-direction: column;
+    gap: var(--space-lg);
+    padding: var(--space-md);
+  }
+  
+  .filter-buttons {
+    width: 100%;
+  }
+  
+  .filter-btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: var(--space-md);
+  }
+  
+  .home-header {
+    padding: var(--space-md);
+  }
+  
+  .home-title {
+    font-size: var(--font-size-xl);
+  }
+  
+  .ask-question-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
