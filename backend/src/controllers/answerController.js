@@ -1,4 +1,5 @@
 import prisma from "../config/database.js";
+import { createNotification } from "../services/notificationService.js";
 
 export const createAnswer = async (req, res) => {
   try {
@@ -20,6 +21,14 @@ export const createAnswer = async (req, res) => {
 
     const newAnswer = await prisma.answer.create({
       data: { content, questionId, authorId }
+    });
+
+    await createNotification({
+      userId: question.authorId,
+      actorId: authorId,
+      type: "NEW_ANSWER",
+      questionId: question.id,
+      answerId: newAnswer.id
     });
 
     res.status(201).json(newAnswer);
@@ -121,6 +130,14 @@ export const acceptAnswer = async (req, res) => {
       });
 
       return newlyAcceptedAnswer;
+    });
+
+    await createNotification({
+      userId: answerToAccept.authorId,
+      actorId: userId,
+      type: "ACCEPTED_ANSWER",
+      questionId: answerToAccept.questionId,
+      answerId: answerToAccept.id
     });
 
     res.status(200).json(updatedAnswer);

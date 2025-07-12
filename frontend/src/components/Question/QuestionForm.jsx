@@ -178,11 +178,11 @@ const QuestionForm = ({ isEdit = false }) => {
   return (
     <div className="question-form-container">
       <div className="question-form-card">
-        <h2>{isEdit ? "Edit" : "Create"} Article</h2>
+        <h2>{isEdit ? "Edit" : "Create"} Post</h2>
         <p className="subtitle">
           {isEdit
-            ? "Update your article with the latest information"
-            : "Share your knowledge with the community"}
+            ? "Update your post with the latest information"
+            : "Share or ask anything you want"}
         </p>
 
         {apiError && <div className="error-message form-error">{apiError}</div>}
@@ -234,7 +234,7 @@ const QuestionForm = ({ isEdit = false }) => {
                   modules={modules}
                   formats={formats}
                   className={errors.content ? "quill-error" : ""}
-                  placeholder="Write your article content here..."
+                  placeholder="Write your post content here..."
                 />
               )}
             />
@@ -260,8 +260,8 @@ const QuestionForm = ({ isEdit = false }) => {
                   ? "Updating..."
                   : "Creating..."
                 : isEdit
-                  ? "Update Article"
-                  : "Create Article"}
+                  ? "Update Post"
+                  : "Create Post"}
             </button>
           </div>
         </form>

@@ -1,0 +1,29 @@
+/* NotificationBell.css */
+.notification-bell {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: white;
+  position: relative;
+  padding: 0.5rem;
+}
+
+.unread-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #d9534f;
+  color: white;
+  border-radius: 50%;
+  padding: 0.15em 0.4em;
+  font-size: 0.75rem;
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+}

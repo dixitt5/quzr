@@ -51,7 +51,7 @@ const Register = () => {
     <div className="register-container">
       <div className="register-card">
         <h2>Create an Account</h2>
-        <p className="subtitle">Join super-blogs to share your thoughts and read amazing content</p>
+        <p className="subtitle">Join quzr to share your thoughts and read amazing content</p>
         
         {apiError && <p className="error-message form-error">{apiError}</p>}
         

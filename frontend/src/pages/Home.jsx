@@ -35,9 +35,9 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="home-header">
-        <h1 className="home-title">All Questions</h1>
+        <h1 className="home-title">All Posts</h1>
         <Link to="/questions/new" className="ask-question-btn">
-          Ask New Question
+          Create New Post
         </Link>
       </div>
 

@@ -111,7 +111,7 @@ const QuestionDetail = () => {
   return (
     <div className="question-detail-container">
       <Link to="/" className="back-link">
-        ← Back to all questions
+        ← Back to all posts
       </Link>
 
       <article className="question-content">

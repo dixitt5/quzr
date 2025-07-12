@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import './Navbar.css';
+import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import NotificationBell from "../Notification/NotificationBell";
+import "./Navbar.css";
 
 const Navbar = () => {
   const { currentUser, logout } = useAuth();
@@ -9,13 +10,18 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          super-blogs
+          quzr
         </Link>
         <div className="nav-buttons">
           {currentUser ? (
             <>
-              <span className="welcome-text">Welcome, {currentUser.username || currentUser.email}!</span>
-              <button onClick={logout} className="logout-button">Log Out</button>
+              <span className="welcome-text">
+                Welcome, {currentUser.username || currentUser.email}!
+              </span>
+              <NotificationBell />
+              <button onClick={logout} className="logout-button">
+                Log Out
+              </button>
             </>
           ) : (
             <>
@@ -33,4 +39,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;
