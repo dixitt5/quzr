@@ -37,8 +37,7 @@ export const getAllQuestions = async (req, res) => {
         author: {
           select: {
             id: true,
-            username: true,
-            imageUrl: true
+            username: true
           }
         }
       },
@@ -62,8 +61,7 @@ export const getQuestionById = async (req, res) => {
         author: {
           select: {
             id: true,
-            username: true,
-            imageUrl: true
+            username: true
           }
         }
       }
