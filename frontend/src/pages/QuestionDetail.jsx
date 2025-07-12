@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { useAuth } from "../contexts/AuthContext";
@@ -15,23 +15,24 @@ const QuestionDetail = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchQuestion = async () => {
-      try {
-        const data = await QuestionService.getQuestionById(id);
-        setQuestion(data);
-      } catch (err) {
-        console.error("Error fetching question:", err);
-        setError(
-          "Failed to load the question. It may have been deleted or does not exist."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchQuestion();
+  const fetchQuestion = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await QuestionService.getQuestionById(id);
+      setQuestion(data);
+    } catch (err) {
+      console.error("Error fetching question:", err);
+      setError(
+        "Failed to load the question. It may have been deleted or does not exist."
+      );
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
+
+  useEffect(() => {
+    fetchQuestion();
+  }, [fetchQuestion]);
 
   const handleDelete = async () => {
     if (
@@ -49,11 +50,8 @@ const QuestionDetail = () => {
     }
   };
 
-  const handleAnswerUpdate = (newAnswer) => {
-    setQuestion((prevQuestion) => ({
-      ...prevQuestion,
-      answers: [...prevQuestion.answers, newAnswer]
-    }));
+  const handleAnswerUpdate = () => {
+    fetchQuestion();
   };
 
   const handleAnswerAccepted = (acceptedAnswer) => {
