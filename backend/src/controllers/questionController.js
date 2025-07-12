@@ -6,7 +6,9 @@ export const createQuestion = async (req, res) => {
     const authorId = req.user.id;
 
     if (!title || !content) {
-      return res.status(400).json({ message: 'Title and content are required' });
+      return res
+        .status(400)
+        .json({ message: "Title and content are required" });
     }
 
     const newQuestion = await prisma.question.create({
@@ -15,12 +17,12 @@ export const createQuestion = async (req, res) => {
         content,
         authorId,
         tags: {
-          connect: tagIds ? tagIds.map((id) => ({ id })) : undefined,
-        },
+          connect: tagIds ? tagIds.map((id) => ({ id })) : undefined
+        }
       },
       include: {
-        tags: true,
-      },
+        tags: true
+      }
     });
 
     res.status(201).json(newQuestion);
@@ -32,22 +34,46 @@ export const createQuestion = async (req, res) => {
 
 export const getAllQuestions = async (req, res) => {
   try {
+    const { filter, tags } = req.query; // Changed 'tag' to 'tags'
+    const where = {};
+
+    if (filter === "unanswered") {
+      where.answers = {
+        none: {}
+      };
+    }
+
+    // Handle single or multiple tags
+    if (tags) {
+      const tagList = Array.isArray(tags) ? tags : [tags];
+      if (tagList.length > 0) {
+        where.tags = {
+          some: {
+            name: {
+              in: tagList
+            }
+          }
+        };
+      }
+    }
+
     const questions = await prisma.question.findMany({
+      where,
       include: {
         author: {
           select: {
             id: true,
-            username: true,
-          },
+            username: true
+          }
         },
         tags: true,
         _count: {
-          select: { votes: true, answers: true },
-        },
+          select: { votes: true, answers: true }
+        }
       },
       orderBy: {
-        createdAt: 'desc',
-      },
+        createdAt: "desc"
+      }
     });
     res.status(200).json(questions);
   } catch (error) {
@@ -126,12 +152,12 @@ export const updateQuestion = async (req, res) => {
         title,
         content,
         tags: {
-          set: tagIds ? tagIds.map((id) => ({ id })) : [],
-        },
+          set: tagIds ? tagIds.map((id) => ({ id })) : []
+        }
       },
       include: {
-        tags: true,
-      },
+        tags: true
+      }
     });
 
     res.status(200).json(updatedQuestion);

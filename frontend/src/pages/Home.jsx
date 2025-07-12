@@ -1,124 +1,74 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { format } from "date-fns";
-import { useAuth } from "../contexts/AuthContext";
-import QuestionService from "../services/question.service";
-import Tag from "../components/Tag/Tag";
+import QuestionList from "../components/Question/QuestionList";
+import tagService from "../services/tag.service";
+import TagFilterDropdown from "../components/Tag/TagFilterDropdown";
 import "./Home.css";
 
-// Helper function to strip HTML tags and extract plain text
-const stripHtml = (html) => {
-  const doc = new DOMParser().parseFromString(html, "text/html");
-  return doc.body.textContent || "";
-};
-
-// Helper function to create excerpt with character limit
-const createExcerpt = (content, limit = 150) => {
-  if (!content) return "";
-
-  const plainText = stripHtml(content);
-  if (plainText.length <= limit) return plainText;
-  return plainText.substring(0, limit) + "...";
-};
-
 const Home = () => {
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const { currentUser } = useAuth();
+  const [filter, setFilter] = useState("newest");
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    const fetchQuestions = async () => {
+    const fetchTags = async () => {
       try {
-        const data = await QuestionService.getAllQuestions();
-        setQuestions(data);
-      } catch (err) {
-        console.error("Error fetching questions:", err);
-        setError("Failed to load questions. Please try again later.");
-      } finally {
-        setLoading(false);
+        const response = await tagService.getAllTags();
+        setTags(response.data);
+      } catch (error) {
+        console.error("Failed to fetch tags:", error);
       }
     };
-
-    fetchQuestions();
+    fetchTags();
   }, []);
+
+  const handleTagChange = (tagName) => {
+    setSelectedTags((prevTags) =>
+      prevTags.includes(tagName)
+        ? prevTags.filter((t) => t !== tagName)
+        : [...prevTags, tagName]
+    );
+  };
 
   return (
     <div className="home-container">
-      <div className="hero-section">
-        <h1>Welcome to Super-Blogs</h1>
-        <p>Discover amazing articles and share your thoughts with the world</p>
-
-        {currentUser && (
-          <Link to="/questions/new" className="create-question-btn">
-            Create New Post
-          </Link>
-        )}
+      <div className="home-header">
+        <h1 className="home-title">All Questions</h1>
+        <Link to="/questions/new" className="ask-question-btn">
+          Ask New Question
+        </Link>
       </div>
 
-      <div className="blogs-container">
-        <h2>Latest Articles</h2>
+      <div className="home-filters">
+        <div className="filter-buttons">
+          <button
+            className={`filter-btn ${filter === "newest" ? "active" : ""}`}
+            onClick={() => setFilter("newest")}
+          >
+            Newest
+          </button>
+          <button
+            className={`filter-btn ${filter === "unanswered" ? "active" : ""}`}
+            onClick={() => setFilter("unanswered")}
+          >
+            Unanswered
+          </button>
+        </div>
+        <div className="tag-filters">
+          <TagFilterDropdown
+            tags={tags}
+            selectedTags={selectedTags}
+            onTagChange={handleTagChange}
+          />
+        </div>
+      </div>
 
-        {loading ? (
-          <div className="loading">
-            <div className="spinner"></div>
-            <p>Loading articles...</p>
-          </div>
-        ) : error ? (
-          <div className="error-message">{error}</div>
-        ) : questions.length === 0 ? (
-          <div className="no-questions">
-            <p>No articles found. Be the first to create one!</p>
-            {currentUser && (
-              <Link to="/questions/new" className="create-question-btn">
-                Create New Post
-              </Link>
-            )}
-          </div>
-        ) : (
-          <div className="blog-grid">
-            {questions.map((question) => {
-              const formattedDate = question.createdAt
-                ? format(new Date(question.createdAt), "MMM d, yyyy")
-                : "";
-
-              const excerpt = createExcerpt(question.content, 150);
-
-              return (
-                <div className="blog-card" key={question.id}>
-                  <div className="blog-content">
-                    <h3>
-                      <Link
-                        to={`/questions/${question.id}`}
-                        className="question-title-link"
-                      >
-                        {question.title}
-                      </Link>
-                    </h3>
-                    <div className="tags-container">
-                      {question.tags.map((tag) => (
-                        <Tag key={tag.id} name={tag.name} />
-                      ))}
-                    </div>
-                    <p className="blog-excerpt">{excerpt}</p>
-                    <div className="blog-meta">
-                      <span className="blog-author">
-                        By {question.author?.username || "Unknown User"}
-                      </span>
-                      <span className="blog-date">{formattedDate}</span>
-                    </div>
-                    <Link
-                      to={`/questions/${question.id}`}
-                      className="read-more-btn"
-                    >
-                      Read More
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
+      <div className="home-content">
+        <QuestionList
+          key={filter + selectedTags.join(",")}
+          filter={filter}
+          tags={selectedTags}
+        />
       </div>
     </div>
   );
